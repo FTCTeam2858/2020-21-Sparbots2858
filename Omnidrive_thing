@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Omnidrive thing")
 public class Omnidrive_thing extends LinearOpMode {
-    private static double Drive_Power = 1;;
-    DcMotor Frontleft = null;
-    DcMotor Frontright = null;
-    DcMotor Backleft = null;
-    DcMotor Backright = null;
+    private static double Drive_Power = 1;
+   private DcMotor Frontleft;
+   private DcMotor Frontright;
+   private DcMotor Backleft;
+   private DcMotor Backright;
     static boolean Omnidrive_on = true;
 
     @Override
@@ -33,7 +33,8 @@ public class Omnidrive_thing extends LinearOpMode {
             telemetry.addData("Right stick y", gamepad1.right_stick_y);
             telemetry.addData("Left stick y", Math.abs(gamepad1.left_stick_y));
             telemetry.addData("Omnidrive on: ", Omnidrive_on);
-
+            telemetry.addData("left_trigger",gamepad1.left_trigger);
+            telemetry.addData("right_trigger",gamepad1.right_trigger);
             double rightstickx = gamepad1.right_stick_x;
             double rightsticky = gamepad1.right_stick_y;
             double power = Math.abs(gamepad1.left_stick_y);
@@ -57,6 +58,8 @@ public class Omnidrive_thing extends LinearOpMode {
                 else if (rightsticky < 0 && rightstickx < 0) {
                     Frontleft.setPower(-power);
                     Backright.setPower(-power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
                 }
                 //move bac
                 else if (rightsticky < 0 && rightstickx == 0) {
@@ -69,6 +72,8 @@ public class Omnidrive_thing extends LinearOpMode {
                 else if (rightsticky < 0 && rightstickx > 0) {
                     Frontright.setPower(-power);
                     Backleft.setPower(-power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
                 }
                 //strafe to the right
                 else if (rightsticky == 0 && rightstickx > 0) {
@@ -81,6 +86,10 @@ public class Omnidrive_thing extends LinearOpMode {
                 else if (rightsticky > 0 && rightstickx > 0) {
                     Frontleft.setPower(power);
                     Backright.setPower(power);
+
+                    Frontright.setPower(0);
+                    Backleft.setPower(0);
+
                 }
                 //go forward
                 else if (rightsticky > 0 && rightstickx == 0) {
@@ -93,6 +102,19 @@ public class Omnidrive_thing extends LinearOpMode {
                 else if (rightsticky > 0 && rightstickx < 0) {
                     Frontright.setPower(power);
                     Backleft.setPower(power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
+                }
+                else if( rightsticky == 0 && rightstickx == 0 && gamepad1.left_trigger > 0.5){
+                    Frontleft.setPower(-power);
+                    Frontright.setPower(power);
+                    Backleft.setPower(-power);
+                    Backright.setPower(power);
+                } else if(rightsticky == 0 && rightstickx == 0 && gamepad1.right_trigger > 0.5){
+                    Frontleft.setPower(power);
+                    Frontright.setPower(-power);
+                    Backleft.setPower(power);
+                    Backright.setPower(-power);
                 }
                 //stop when right stick isnt moved
                 else {
