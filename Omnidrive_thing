@@ -58,7 +58,7 @@ public class Omnidrive_thing extends LinearOpMode {
                 else if (rightsticky < 0 && rightstickx < 0) {
                     Frontleft.setPower(-power);
                     Backright.setPower(-power);
-                    Frontleft.setPower(0);
+                    Frontright.setPower(0);
                     Backright.setPower(0);
                 }
                 //move bac
