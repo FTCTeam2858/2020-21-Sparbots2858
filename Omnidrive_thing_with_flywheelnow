@@ -1,0 +1,143 @@
+package org.firstinspires.ftc.teamcode.OpModes;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+//Starts out in Omnidrive mode
+@TeleOp(name = "Omnidrive thing")
+public class Omnidrive_thing extends LinearOpMode {
+    private static double Drive_Power = 1;
+    private static double TurnWheelpower = 0;
+   private DcMotor Frontleft;
+   private DcMotor Frontright;
+   private DcMotor Backleft;
+   private DcMotor Backright;
+    static boolean Omnidrive_on = true;
+    private DcMotor leftFlywheel;
+    private DcMotor rightFlywheel;
+    @Override
+    public void runOpMode() throws InterruptedException {
+        Frontleft = hardwareMap.dcMotor.get("Frontleft");
+        Frontright = hardwareMap.dcMotor.get("Frontright");
+        Frontleft.setDirection(DcMotor.Direction.REVERSE);
+        Backleft = hardwareMap.dcMotor.get("Backleft");
+        Backright = hardwareMap.dcMotor.get("Backright");
+        Backleft.setDirection(DcMotor.Direction.REVERSE);
+        leftFlywheel = hardwareMap.dcMotor.get("TurnWheelleft");
+        rightFlywheel = hardwareMap.dcMotor.get("TurnWheelright");
+
+        waitForStart();
+//left stick controls poqwer right stick controls direction
+//"The x is negative to the left and positive to the right. For strange reasons, up is negative and down is positive"
+        while(opModeIsActive()){
+            //Omnidrive stuf
+            telemetry.addData("Right stick x", gamepad1.right_stick_x);
+            telemetry.addData("Right stick y", gamepad1.right_stick_y);
+            telemetry.addData("Left stick y", Math.abs(gamepad1.left_stick_y));
+            telemetry.addData("Omnidrive on: ", Omnidrive_on);
+            telemetry.addData("left_trigger",gamepad1.left_trigger);
+            telemetry.addData("right_trigger",gamepad1.right_trigger);
+            telemetry.addData("powerFlywheel",TurnWheelpower);
+            double rightstickx = gamepad1.right_stick_x;
+            double rightsticky = gamepad1.right_stick_y;
+            TurnWheelpower = Math.abs(gamepad2.right_stick_y);
+            double power = Math.abs(gamepad1.left_stick_y);
+            if(Omnidrive_on==true && gamepad1.a == true){
+                Omnidrive_on = false;
+            }
+
+            if(Omnidrive_on==false && gamepad1.b == true){
+                Omnidrive_on = true;
+            }
+
+            if(Omnidrive_on == true) {
+                //strafe to the left
+                if(rightsticky == 0 && rightstickx < 0) {
+                    Frontleft.setPower(-power);
+                    Frontright.setPower(power);
+                    Backleft.setPower(power);
+                    Backright.setPower(-power);
+                }
+                //strafe to the down left
+                else if (rightsticky < 0 && rightstickx < 0) {
+                    Frontleft.setPower(-power);
+                    Backright.setPower(-power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
+                }
+                //move bac
+                else if (rightsticky < 0 && rightstickx == 0) {
+                    Frontleft.setPower(-power);
+                    Frontright.setPower(-power);
+                    Backleft.setPower(-power);
+                    Backright.setPower(-power);
+                }
+                //strafe to the down right
+                else if (rightsticky < 0 && rightstickx > 0) {
+                    Frontright.setPower(-power);
+                    Backleft.setPower(-power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
+                }
+                //strafe to the right
+                else if (rightsticky == 0 && rightstickx > 0) {
+                    Frontleft.setPower(power);
+                    Frontright.setPower(-power);
+                    Backleft.setPower(-power);
+                    Backright.setPower(power);
+                }
+                //strafe to the up right
+                else if (rightsticky > 0 && rightstickx > 0) {
+                    Frontleft.setPower(power);
+                    Backright.setPower(power);
+
+                    Frontright.setPower(0);
+                    Backleft.setPower(0);
+
+                }
+                //go forward
+                else if (rightsticky > 0 && rightstickx == 0) {
+                    Frontleft.setPower(power);
+                    Frontright.setPower(power);
+                    Backleft.setPower(power);
+                    Backright.setPower(power);
+                }
+                //strafe to the up left
+                else if (rightsticky > 0 && rightstickx < 0) {
+                    Frontright.setPower(power);
+                    Backleft.setPower(power);
+                    Frontleft.setPower(0);
+                    Backright.setPower(0);
+                }
+                else if( rightsticky == 0 && rightstickx == 0 && gamepad1.left_trigger > 0.5){
+                    Frontleft.setPower(-power);
+                    Frontright.setPower(power);
+                    Backleft.setPower(-power);
+                    Backright.setPower(power);
+                } else if(rightsticky == 0 && rightstickx == 0 && gamepad1.right_trigger > 0.5){
+                    Frontleft.setPower(power);
+                    Frontright.setPower(-power);
+                    Backleft.setPower(power);
+                    Backright.setPower(-power);
+                }
+                //stop when right stick isnt moved
+                else {
+                    Frontleft.setPower(0);
+                    Frontright.setPower(0);
+                    Backleft.setPower(0);
+                    Backright.setPower(0);
+                }
+                leftFlywheel.setPower(-TurnWheelpower);
+                rightFlywheel.setPower(TurnWheelpower);
+            }
+            else{
+                //Tank drive
+                Frontleft.setPower(gamepad1.left_stick_y);
+                Frontright.setPower(gamepad1.right_stick_y);
+                leftFlywheel.setPower(-TurnWheelpower);
+                rightFlywheel.setPower(TurnWheelpower);
+            }
+        }
+    }
+}
