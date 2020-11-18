@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -20,21 +21,18 @@ public class HardwareMap {
         public DcMotor backRightDrive = null;
         public DcMotor shootDriveL = null;
         public DcMotor shootDriveR = null;
+       // public DcMotor wheelDrive = null;
 
-
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-
-
-
-
+        public CRServo gearBtm = null;
+        public CRServo gearTop = null;
+        //public Servo intakeLift = null;
+    // hsvValues is an array that will hold the hue, saturation, and value information.
+        public Servo ringClamp = null;
+        public Servo ringBlock = null;
+        public DcMotor ringDrive = null;
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         public final double SCALE_FACTOR = 255;
-
-
-
-
-
 
 
         //Set servo initial positions
@@ -67,9 +65,17 @@ public class HardwareMap {
             frontRightDrive = hwMap.get(DcMotor.class, "front_right_drive");
             backLeftDrive = hwMap.get(DcMotor.class, "back_left_drive");
             backRightDrive = hwMap.get(DcMotor.class, "back_right_drive");
-            shootDriveL = hwMap.get(DcMotor.class, "shoot_left_drive");
-            shootDriveR = hwMap.get(DcMotor.class, "shoot_right_drive");
-            //turnMotor = hwMap.get(DcMotor.class,"turn_motor");
+            shootDriveR = hwMap.get(DcMotor.class, "right_shooter");
+            shootDriveL = hwMap.get(DcMotor.class, "left_shooter");
+            ringDrive = hwMap.get(DcMotor.class,"ring_drive");
+            //wheelDrive = hwMap.get(DcMotor.class, "wheel_intake");
+            //intakeLift = hwMap.get(Servo.class, "intake_lift");
+            gearBtm = hwMap.get(CRServo.class, "gear_bottom");
+            gearTop = hwMap.get(CRServo.class,"gear_top");
+            ringClamp = hwMap.get(Servo.class,"ring_clamp");
+            ringBlock = hwMap.get(Servo.class,"ring_block");
+
+
 
 
 
@@ -81,7 +87,12 @@ public class HardwareMap {
             backRightDrive.setPower(0);
             shootDriveR.setPower(0);
             shootDriveL.setPower(0);
+            ringDrive.setPower(0);
+            //wheelDrive.setPower(0);
+            //intakeLift.setPosition(0);
 
+            //set all servos to initial position
+            ringClamp.setPosition(0);
 
 
             // use RUN_USING_ENCODERS
@@ -91,6 +102,7 @@ public class HardwareMap {
             backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             shootDriveR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             shootDriveL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
 
 
